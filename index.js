@@ -1,19 +1,51 @@
 const express = require('express');
 const axios = require('axios');
+const dotenv=require('dotenv');
 const app = express();
-
+dotenv.config();
 app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // * Please DO NOT INCLUDE the private app access token in your repo. Don't do this practicum in your normal account.
-const PRIVATE_APP_ACCESS = '';
-
+const PRIVATE_APP_ACCESS = process.env.PRIVATE_APP_ACCESS;
+const objectTypeId=process.env.objectTypeId
 // TODO: ROUTE 1 - Create a new app.get route for the homepage to call your custom object data. Pass this data along to the front-end and create a new pug template in the views folder.
 
 // * Code for Route 1 goes here
 
+// * Code for Route 1 goes here
+app.get('/', async (req, res) => {
+    const properties = '?properties=vaccine_center,pet_name,pet_type,pet_age,pet_image';
+    const custom_objects_url = `https://api.hubapi.com/crm/v3/objects/${objectTypeId}${properties}`;
+    
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+    try {
+        const response = await axios.get(custom_objects_url, { headers });
+        let pets = response.data.results;
+        console.log(pets)
+        for (let pet of pets) {
+            if (pet.properties.pet_image && !pet.properties.pet_image.startsWith('http')) {
+                try {
+                    const fileId = pet.properties.pet_image;
+                    const fileResponse = await axios.get(`https://api.hubapi.com/files/v3/files/${fileId}`, { headers });
+                    pet.properties.pet_image = fileResponse.data.url;
+                } catch (fileError) {
+                    console.error(`Failed to fetch URL for File ID ${pet.properties.pet_image}:`, fileError.message);
+                    pet.properties.pet_image = null;
+                }
+            }
+        }
+        res.render('homepage', { pets });
+    } catch (error) {
+        console.error('Error fetching custom objects:', error.response?.data || error.message);
+        res.status(500).send('Error retrieving pet data');
+    }
+});
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
 
 // * Code for Route 2 goes here

@@ -1,0 +1,37 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/css/homepage.css")
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap", rel="stylesheet")
+    title Pet Directory
+
+  body
+    .bg-orb.orb-1
+    .bg-orb.orb-2
+    .bg-orb.orb-3
+
+    .page
+      h1.title Registered Pets
+
+      .grid
+        each pet, i in pets
+          .card(style=`animation-delay: ${i * 0.08}s`)
+            .card-glow
+            if pet.properties.pet_image
+              .img-wrap
+                img.pet-img(src=pet.properties.pet_image alt=`Image of ${pet.properties.pet_name}`)
+
+            h2= pet.properties.pet_name || 'Unnamed Pet'
+
+            p
+              strong Type: 
+              | #{pet.properties.pet_type || 'N/A'}
+            p
+              strong Age: 
+              | #{pet.properties.pet_age || 'N/A'}
+            p
+              strong Vaccine Center: 
+              | #{pet.properties.vaccine_center || 'N/A'}
