@@ -1,5 +1,7 @@
 const express = require('express');
 const axios = require('axios');
+const multer = require('multer');
+const FormData = require('form-data');
 const dotenv=require('dotenv');
 const app = express();
 dotenv.config();
@@ -7,6 +9,7 @@ app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+const upload = multer({ storage: multer.memoryStorage() });
 
 // * Please DO NOT INCLUDE the private app access token in your repo. Don't do this practicum in your normal account.
 const PRIVATE_APP_ACCESS = process.env.PRIVATE_APP_ACCESS;
@@ -50,9 +53,51 @@ app.get('/', async (req, res) => {
 
 // * Code for Route 2 goes here
 
-// TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
+app.get('/add-pet',(req,res)=>{
+    res.render('pet-form')
+})
 
-// * Code for Route 3 goes here
+
+app.post('/add-pet', upload.single('pet_image'), async (req, res) => {
+    const headers = {
+        Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        let petImageId;
+        if (req.file) {
+            const form = new FormData();
+            form.append('file', req.file.buffer, {
+                filename: req.file.originalname,
+                contentType: req.file.mimetype
+            });
+            form.append('options', JSON.stringify({ access: 'PUBLIC_NOT_INDEXABLE' }));
+            form.append('folderPath', '/pet-images');
+
+            const fileResponse = await axios.post('https://api.hubapi.com/files/v3/files', form, {
+                headers: { ...headers, ...form.getHeaders() }
+            });
+            petImageId = fileResponse.data.id;
+        }
+
+    const pet = {
+        properties: {
+            pet_name: req.body.pet_name,
+            pet_type: req.body.pet_type,
+            pet_age: req.body.pet_age,
+            vaccine_center: req.body.vaccine_center,
+            ...(petImageId && { pet_image: petImageId })
+        }
+    };
+
+        await axios.post(`https://api.hubapi.com/crm/v3/objects/${objectTypeId}`, pet, { headers });
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error creating pet:', error.response?.data || error.message);
+        res.status(500).send('Error creating pet data');
+    }
+});
 
 /** 
 * * This is sample code to give you a reference for how you should structure your calls. 

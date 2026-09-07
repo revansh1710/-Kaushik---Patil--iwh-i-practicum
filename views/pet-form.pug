@@ -1,0 +1,69 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/css/homepage.css")
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap", rel="stylesheet")
+    title Add Pet
+
+  body
+    .bg-orb.orb-1
+    .bg-orb.orb-2
+    .bg-orb.orb-3
+
+    .page
+      h1.title Register a New Pet
+
+      .form-card
+        form(action="/add-pet" method="POST" enctype="multipart/form-data")
+
+          .field
+            label(for="pet_name") Pet Name
+            input(
+              type="text"
+              id="pet_name"
+              name="pet_name"
+              required
+            )
+
+          .field
+            label(for="pet_type") Pet Type
+            input(
+              type="text"
+              id="pet_type"
+              name="pet_type"
+              required
+            )
+
+          .field
+            label(for="pet_age") Pet Age
+            input(
+              type="number"
+              id="pet_age"
+              name="pet_age"
+              required
+            )
+
+          .field
+            label(for="vaccine_center") Vaccine Center
+            input(
+              type="text"
+              id="vaccine_center"
+              name="vaccine_center"
+              required
+            )
+
+          .field
+            label(for="pet_image") Pet Image
+            input(
+              type="file"
+              id="pet_image"
+              name="pet_image"
+              accept="image/*"
+            )
+
+          button.submit-btn(type="submit") Register Pet
+
+      a.back-link(href="/") ← Back to Pet Directory
