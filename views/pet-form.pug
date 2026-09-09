@@ -14,56 +14,64 @@ html(lang="en")
     .bg-orb.orb-3
 
     .page
-      h1.title Register a New Pet
+      .page-header
+        span.eyebrow Pet Directory
+        h1.title Register a New Pet
+        p.subtitle Fill in the details below to add a new companion to the directory.
 
       .form-card
+        .card-glow
         form(action="/add-pet" method="POST" enctype="multipart/form-data")
 
           .field
-            label(for="pet_name") Pet Name
-            input(
-              type="text"
-              id="pet_name"
-              name="pet_name"
-              required
-            )
+            label(for="pet_name")
+              span.field-icon 🐾
+              | Pet Name
+            input(type="text" id="pet_name" name="pet_name" placeholder="e.g. Bella" required)
 
           .field
-            label(for="pet_type") Pet Type
-            input(
-              type="text"
-              id="pet_type"
-              name="pet_type"
-              required
-            )
+            label(for="pet_type")
+              span.field-icon 🐶
+              | Pet Type
+            input(type="text" id="pet_type" name="pet_type" placeholder="e.g. Labrador" required)
 
           .field
-            label(for="pet_age") Pet Age
-            input(
-              type="number"
-              id="pet_age"
-              name="pet_age"
-              required
-            )
+            label(for="pet_age")
+              span.field-icon 🎂
+              | Pet Age
+            input(type="number" id="pet_age" name="pet_age" placeholder="e.g. 2" min="0" required)
 
           .field
-            label(for="vaccine_center") Vaccine Center
-            input(
-              type="text"
-              id="vaccine_center"
-              name="vaccine_center"
-              required
-            )
+            label(for="vaccine_center")
+              span.field-icon 💉
+              | Vaccine Center
+            input(type="text" id="vaccine_center" name="vaccine_center" placeholder="e.g. Downtown Vet Clinic" required)
 
           .field
-            label(for="pet_image") Pet Image
-            input(
-              type="file"
-              id="pet_image"
-              name="pet_image"
-              accept="image/*"
-            )
+            label(for="pet_image")
+              span.field-icon 📷
+              | Pet Image
 
-          button.submit-btn(type="submit") Register Pet
+            .file-upload
+              input(type="file" id="pet_image" name="pet_image" accept="image/*")
+              label.file-upload-label(for="pet_image")
+                span.file-upload-icon ⬆
+                span.file-upload-text Choose a photo or drag it here
+                span.file-upload-name(data-default="Choose a photo or drag it here")
 
-      a.back-link(href="/") ← Back to Pet Directory
+          button.submit-btn(type="submit")
+            span Register Pet
+            span.btn-arrow →
+
+      a.back-link(href="/")
+        span.back-arrow ←
+        |  Back to Pet Directory
+
+    script.
+      const fileInput = document.getElementById('pet_image');
+      const fileNameEl = document.querySelector('.file-upload-name');
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        fileNameEl.textContent = file ? file.name : fileNameEl.dataset.default;
+        fileNameEl.closest('.file-upload-label').classList.toggle('has-file', !!file);
+      });

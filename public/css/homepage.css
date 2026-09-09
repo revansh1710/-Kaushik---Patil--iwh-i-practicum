@@ -101,10 +101,65 @@ body {
   to { background-position: 200% center; }
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 28px;
+.table-wrap {
+  overflow-x: auto;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 8px 32px rgba(31, 36, 48, 0.08);
+}
+
+.pet-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.pet-table th,
+.pet-table td {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(31, 36, 48, 0.1);
+}
+
+.pet-table th {
+  color: black;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pet-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.pet-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.photo-cell {
+  width: 88px;
+}
+
+.pet-img {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.no-image {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  padding: 2rem !important;
+  text-align: center;
+  color: #4a4f5a;
 }
 
 /* Glassmorphic cards with entrance animation */
@@ -172,7 +227,7 @@ body {
 }
 
 .pet-img {
-  width: 100%;
+  width: 200px;
   height: 200px;
   object-fit: cover;
   display: block;
@@ -222,9 +277,6 @@ p strong {
   }
   .title {
     font-size: 2rem;
-  }
-  .grid {
-    grid-template-columns: 1fr;
   }
   .bg-orb {
     filter: blur(50px);

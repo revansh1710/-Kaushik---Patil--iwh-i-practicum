@@ -15,23 +15,29 @@ html(lang="en")
 
     .page
       h1.title Registered Pets
-
-      .grid
-        each pet, i in pets
-          .card(style=`animation-delay: ${i * 0.08}s`)
-            .card-glow
-            if pet.properties.pet_image
-              .img-wrap
-                img.pet-img(src=pet.properties.pet_image alt=`Image of ${pet.properties.pet_name}`)
-
-            h2= pet.properties.pet_name || 'Unnamed Pet'
-
-            p
-              strong Type: 
-              | #{pet.properties.pet_type || 'N/A'}
-            p
-              strong Age: 
-              | #{pet.properties.pet_age || 'N/A'}
-            p
-              strong Vaccine Center: 
-              | #{pet.properties.vaccine_center || 'N/A'}
+      a(href="http://localhost:3001/add-pet").title Add/Update this table
+      .table-wrap
+        table.pet-table
+          thead
+            tr
+              th(scope="col") Photo
+              th(scope="col") Name
+              th(scope="col") Type
+              th(scope="col") Age
+              th(scope="col") Vaccine Center
+          tbody
+            if pets.length
+              each pet in pets
+                tr
+                  td.photo-cell
+                    if pet.properties.pet_image
+                      img.pet-img(src=pet.properties.pet_image alt=`Image of ${pet.properties.pet_name || 'pet'}`)
+                    else
+                      span.no-image No image
+                  td= pet.properties.pet_name || 'Unnamed Pet'
+                  td= pet.properties.pet_type || 'N/A'
+                  td= pet.properties.pet_age || 'N/A'
+                  td= pet.properties.vaccine_center || 'N/A'
+            else
+              tr
+                td.empty-state(colspan="5") No registered pets found.
