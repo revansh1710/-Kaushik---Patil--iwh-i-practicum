@@ -53,12 +53,12 @@ app.get('/', async (req, res) => {
 
 // * Code for Route 2 goes here
 
-app.get('/add-pet',(req,res)=>{
+app.get('/update-cobj',(req,res)=>{
     res.render('pet-form')
 })
 
 
-app.post('/add-pet', upload.single('pet_image'), async (req, res) => {
+app.post('/update-cobj', upload.single('pet_image'), async (req, res) => {
     const headers = {
         Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
         'Content-Type': 'application/json'
